@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Арал & Райкан — Тойго чакыруу</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Georgia, "Times New Roman", serif;
+  background:#f8f2e9;
+  color:#4b3828;
+}
+
+.envelope-screen{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:linear-gradient(135deg,#f4eadc,#fffaf3);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  transition:1s ease;
+}
+
+.envelope-screen.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.top-text{
+  letter-spacing:4px;
+  font-size:14px;
+  color:#a77b3d;
+  margin-bottom:35px;
+}
+
+.envelope{
+  width:280px;
+  height:190px;
+  position:relative;
+  cursor:pointer;
+  filter:drop-shadow(0 15px 20px rgba(0,0,0,.18));
+  transition:.5s;
+}
+
+.envelope:hover{
+  transform:scale(1.04);
+}
+
+.envelope-body{
+  position:absolute;
+  inset:0;
+  background:#fffaf1;
+  border:1px solid #d2b47d;
+  border-radius:5px;
+}
+
+.envelope-body:before,
+.envelope-body:after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  width:50%;
+  height:100%;
+  background:#f2e3cc;
+}
+
+.envelope-body:before{
+  left:0;
+  clip-path:polygon(0 0,100% 100%,0 100%);
+}
+
+.envelope-body:after{
+  right:0;
+  clip-path:polygon(100% 0,100% 100%,0 100%);
+}
+
+.envelope-flap{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:110px;
+  background:#ead5b5;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  z-index:3;
+}
+
+.seal{
+  position:absolute;
+  z-index:5;
+  left:50%;
+  top:85px;
+  transform:translateX(-50%);
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#b8894d;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:bold;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.envelope-screen h1{
+  margin-top:35px;
+  font-size:35px;
+  font-weight:normal;
+}
+
+.envelope-screen h1 span{
+  color:#b58a4c;
+}
+
+.hint{
+  margin-top:15px;
+  color:#8a7764;
+  font-size:13px;
+}
+
+
+main{
+  display:none;
+}
+
+main.show{
+  display:block;
+  animation:fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+#musicButton{
+  position:fixed;
+  right:18px;
+  top:18px;
+  z-index:20;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:1px solid #d0ad75;
+  background:rgba(255,250,240,.9);
+  color:#a77b3d;
+  font-size:22px;
+  cursor:pointer;
+}
+
+
+.hero{
+  height:100vh;
+  min-height:650px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.hero-dark{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.1),
+    rgba(0,0,0,.55)
+  );
+}
+
+.hero-text{
+  position:absolute;
+  bottom:70px;
+  width:100%;
+  text-align:center;
+  color:white;
+  padding:20px;
+}
+
+.hero-text p{
+  letter-spacing:5px;
+  font-size:13px;
+  margin-bottom:18px;
+}
+
+.hero-text h2{
+  font-size:48px;
+  font-weight:normal;
+}
+
+.hero-text h2 span{
+  color:#e6c27c;
+}
+
+.date{
+  margin-top:22px;
+  font-size:16px;
+  letter-spacing:4px;
+}
+
+
+section{
+  width:100%;
+}
+
+.invitation-text{
+  padding:80px 25px;
+  max-width:800px;
+  margin:auto;
+  text-align:center;
+}
+
+.ornament{
+  color:#b58a4c;
+  font-size:38px;
+  margin-bottom:20px;
+}
+
+.gold-title{
+  color:#a77b3d;
+  letter-spacing:3px;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:25px;
+}
+
+.invitation-text h3{
+  font-size:27px;
+  font-weight:normal;
+  line-height:1.5;
+  margin-bottom:25px;
+}
+
+.invitation-text p:not(.gold-title){
+  font-size:17px;
+  line-height:1.9;
+  color:#665548;
+  margin-bottom:18px;
+}
+
+
+.photo{
+  width:100%;
+  height:650px;
+  overflow:hidden;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+
+.details{
+  padding:80px 25px;
+  text-align:center;
+  background:#fffaf3;
+}
+
+.date-box{
+  margin:30px auto 55px;
+  width:170px;
+  height:170px;
+  border:1px solid #c9a66a;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.date-box strong{
+  font-size:55px;
+  font-weight:normal;
+  color:#a77b3d;
+}
+
+.date-box span{
+  letter-spacing:3px;
+  font-size:13px;
+}
+
+.date-box small{
+  margin-top:7px;
+  font-size:14px;
+}
+
+.detail{
+  margin:45px auto;
+  max-width:500px;
+}
+
+.icon{
+  font-size:32px;
+  color:#b58a4c;
+  margin-bottom:12px;
+}
+
+.detail h4{
+  letter-spacing:3px;
+  color:#a77b3d;
+  font-size:13px;
+  margin-bottom:12px;
+}
+
+.detail p{
+  font-size:19px;
+  line-height:1.7;
+}
+
+
+.card-photo{
+  width:100%;
+  padding:50px 20px;
+  text-align:center;
+  background:#f4eadc;
+}
+
+.card-photo img{
+  width:100%;
+  max-width:700px;
+  height:auto;
+  display:block;
+  margin:auto;
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+
+.ending{
+  padding:80px 25px;
+  text-align:center;
+  background:#fffaf3;
+}
+
+.ending h3{
+  font-size:32px;
+  font-weight:normal;
+  margin-bottom:20px;
+}
+
+.ending p{
+  max-width:500px;
+  margin:auto;
+  line-height:1.8;
+  font-size:17px;
+  color:#665548;
+}
+
+.names{
+  margin-top:35px;
+  color:#a77b3d;
+  font-size:28px;
+}
+
+
+footer{
+  padding:25px;
+  text-align:center;
+  background:#eadbc6;
+  color:#74583b;
+  font-size:13px;
+}
+
+
+@media(max-width:600px){
+
+  .hero{
+    min-height:600px;
+  }
+
+  .hero-text h2{
+    font-size:39px;
+  }
+
+  .invitation-text h3{
+    font-size:23px;
+  }
+
+  .photo{
+    height:500px;
+  }
+
+  .envelope{
+    width:250px;
+    height:170px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- КОНВЕРТ -->
+<div class="envelope-screen" id="envelopeScreen">
+
+  <div class="top-text">
+    ТОЙГО ЧАКЫРУУ
+  </div>
+
+  <div class="envelope" id="openInvitation">
+
+    <div class="envelope-body"></div>
+
+    <div class="envelope-flap"></div>
+
+    <div class="seal">
+      A & R
+    </div>
+
+  </div>
+
+  <h1>
+    Арал <span>&</span> Райкан
+  </h1>
+
+  <p class="hint">
+    Чакыруу барагын ачуу үчүн конвертти басыңыз
+  </p>
+
+</div>
+
+
+<!-- НЕГИЗГИ БӨЛҮК -->
+<main id="invitation">
+
+<!-- ЫР -->
+<audio id="music" loop>
+  <source src="керемет жашоо.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicButton">♫</button>
+
+
+<!-- БАШКЫ СҮРӨТ -->
+<section class="hero">
+
+  <img src="47bd7cbfa3f00b64ca3.jpg" alt="Арал жана Райкан">
+
+  <div class="hero-dark"></div>
+
+  <div class="hero-text">
+
+    <p>БАКЫТТУУ КҮНҮБҮЗ</p>
+
+    <h2>
+      Арал <span>&</span> Райкан
+    </h2>
+
+    <div class="date">
+      10 ОКТЯБРЬ · 17:00
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ЧАКЫРУУ -->
+<section class="invitation-text">
+
+  <div class="ornament">❦</div>
+
+  <p class="gold-title">
+    КЫМБАТТУУ ЖАКЫНДАРЫБЫЗ!
+  </p>
+
+  <h3>
+    Өмүрүбүздөгү эң маанилүү жана өзгөчө күндөрүбүздүн биринде
+    сиздерди жаныбыздан көрүп, кубанычыбызды чогуу бөлүшкүбүз келет.
+  </h3>
+
+  <p>
+    Тойубузга келип, ак тилектериңиздерди айтып,
+    бактылуу күнүбүздүн күбөсү болуп кетишиңиздерди каалайбыз.
+  </p>
+
+</section>
+
+
+<!-- ШАКЕКТЕР -->
+<section class="photo">
+
+  <img src="982922924_17907690.jpg" alt="Шакектер">
+
+</section>
+
+
+<!-- ТОЙДУН МААЛЫМАТЫ -->
+<section class="details">
+
+  <p class="gold-title">
+    ТОЮБУЗДУН КҮНҮ
+  </p>
+
+  <div class="date-box">
+
+    <strong>10</strong>
+
+    <span>ОКТЯБРЬ</span>
+
+    <small>17:00</small>
+
+  </div>
+
+
+  <div class="detail">
+
+    <div class="icon">♡</div>
+
+    <h4>ТОЙ ЭЭЛЕРИ</h4>
+
+    <p>
+      Алтынбек & Кыйбат
+    </p>
+
+  </div>
+
+
+  <div class="detail">
+
+    <div class="icon">⌖</div>
+
+    <h4>ТОЙДУН ДАРЕГИ</h4>
+
+    <p>
+      Базар-Коргон району<br>
+      «Алтын Сарай» рестораны
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ЧАКЫРУУ КАРТОЧКАСЫ -->
+<section class="card-photo">
+
+  <img
+    src="file_000000085c8822.jpg"
+    alt="Тойго чакыруу"
+  >
+
+</section>
+
+
+<!-- АЯГЫ -->
+<section class="ending">
+
+  <div class="ornament">❦</div>
+
+  <h3>
+    Сиздерди чыдамсыздык менен күтөбүз!
+  </h3>
+
+  <p>
+    Бактылуу күнүбүздө сиздердин ак тилегиңиздер
+    биз үчүн чоң белек.
+  </p>
+
+  <div class="names">
+    Арал & Райкан
+  </div>
+
+</section>
+
+
+<footer>
+  Сүйүү менен, Арал & Райкан ♡
+</footer>
+
+</main>
+
+
+<script>
+
+const envelopeScreen =
+  document.getElementById("envelopeScreen");
+
+const invitation =
+  document.getElementById("invitation");
+
+const openInvitation =
+  document.getElementById("openInvitation");
+
+const music =
+  document.getElementById("music");
+
+const musicButton =
+  document.getElementById("musicButton");
+
+
+openInvitation.addEventListener("click", function(){
+
+  envelopeScreen.classList.add("hide");
+
+  invitation.classList.add("show");
+
+  music.play().catch(function(){
+    console.log("Музыканы автоматтык баштоо бөгөттөлдү");
+  });
+
+});
+
+
+musicButton.addEventListener("click", function(){
+
+  if(music.paused){
+
+    music.play();
+
+    musicButton.innerHTML = "♫";
+
+  }else{
+
+    music.pause();
+
+    musicButton.innerHTML = "🔇";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
